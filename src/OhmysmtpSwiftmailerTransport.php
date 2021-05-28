@@ -106,16 +106,17 @@ class OhmysmtpSwiftmailerTransport implements Swift_Transport
      */
     protected function prepareEmailAddresses(array $emails)
     {
-        $convertedEmails = array();
+        $convertedEmails = [];
         foreach ($emails as $email => $name) {
             $convertedEmails[] = $name ? $name . " <{$email}>" : $email;
         }
+
         return $convertedEmails;
     }
 
     /**
      * Extract the MIME type requested
-     * 
+     *
      * @param Swift_Mime_SimpleMessage $message
      * @param string $mimeType
      * @return Swift_Mime_MimePart
@@ -123,7 +124,7 @@ class OhmysmtpSwiftmailerTransport implements Swift_Transport
     protected function getMIMEPart(Swift_Mime_SimpleMessage $message, $mimeType)
     {
         foreach ($message->getChildren() as $part) {
-            if (strpos($part->getContentType(), $mimeType) === 0 && !($part instanceof \Swift_Mime_Attachment)) {
+            if (strpos($part->getContentType(), $mimeType) === 0 && ! ($part instanceof \Swift_Mime_Attachment)) {
                 return $part;
             }
         }
@@ -146,6 +147,7 @@ class OhmysmtpSwiftmailerTransport implements Swift_Transport
         if ($message->getHeaders()) {
             $this->processTagsFromHeaders($payload, $message);
         }
+
         return $payload;
     }
 
@@ -175,7 +177,7 @@ class OhmysmtpSwiftmailerTransport implements Swift_Transport
 
     /**
      * Add swiftmailer subject to OMS payload
-     * 
+     *
      * @param  array                     $payload
      * @param  Swift_Mime_SimpleMessage  $message
      * @return object
@@ -184,7 +186,6 @@ class OhmysmtpSwiftmailerTransport implements Swift_Transport
     {
         $payload['subject'] = $message->getSubject();
     }
-
 
     /**
      * Turn SwiftMailer MIME parts into htmlbody, textbody and attachment array
@@ -200,9 +201,11 @@ class OhmysmtpSwiftmailerTransport implements Swift_Transport
             case 'multipart/alternative':
             case 'multipart/mixed':
                 $payload['htmlbody'] = $message->getBody();
+
                 break;
             default:
                 $payload['textbody'] = $message->getBody();
+
                 break;
         }
 
@@ -216,15 +219,15 @@ class OhmysmtpSwiftmailerTransport implements Swift_Transport
 
         // Attachments
         if ($message->getChildren()) {
-            $payload['attachments'] = array();
+            $payload['attachments'] = [];
             foreach ($message->getChildren() as $attachment) {
                 if (is_object($attachment) and $attachment instanceof \Swift_Mime_Attachment) {
-                    $attachments = array(
+                    $attachments = [
                         'name' => $attachment->getFilename(),
                         'content' => base64_encode($attachment->getBody()),
-                        'content_type' => $attachment->getContentType()
-                    );
-                    if ($attachment->getDisposition() != 'attachment' && $attachment->getId() != NULL) {
+                        'content_type' => $attachment->getContentType(),
+                    ];
+                    if ($attachment->getDisposition() != 'attachment' && $attachment->getId() != null) {
                         $attachments['cid'] = 'cid:' . $attachment->getId();
                     }
                     $payload['attachments'][] = $attachments;
