@@ -37,7 +37,7 @@ You'll need to store this API token somewhere in your app/runtime, we recommend 
 <?php
 require_once('./vendor/autoload.php');
 
-$transport = new Ohmysmtp\OhmysmtpSwiftmailer(env('OHMYSMTP_API_TOKEN'));
+$transport = new OhmysmtpSwiftmailerTransport(env('OHMYSMTP_API_TOKEN'));
 $mailer = new Swift_Mailer($transport);
 
 $message = (new Swift_Message('A transactional email from OhMySMTP!'))
