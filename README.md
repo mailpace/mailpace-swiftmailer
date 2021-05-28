@@ -1,9 +1,9 @@
 # The official Swiftmailer transport for OhMySMTP
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/ohmysmtp/ohmysmtp_swiftmailer.svg?style=flat-square)](https://packagist.org/packages/ohmysmtp/ohmysmtp_swiftmailer)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/ohmysmtp/ohmysmtp_swiftmailer/run-tests?label=tests)](https://github.com/ohmysmtp/ohmysmtp_swiftmailer/actions?query=workflow%3ATests+branch%3Amaster)
-[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/ohmysmtp/ohmysmtp_swiftmailer/Check%20&%20fix%20styling?label=code%20style)](https://github.com/ohmysmtp/ohmysmtp_swiftmailer/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amaster)
-[![Total Downloads](https://img.shields.io/packagist/dt/ohmysmtp/ohmysmtp_swiftmailer.svg?style=flat-square)](https://packagist.org/packages/ohmysmtp/ohmysmtp_swiftmailer)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/ohmysmtp/ohmysmtp-swiftmailer.svg?style=flat-square)](https://packagist.org/packages/ohmysmtp/ohmysmtp-swiftmailer)
+[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/ohmysmtp/ohmysmtp-swiftmailer/run-tests?label=tests)](https://github.com/ohmysmtp/ohmysmtp-swiftmailer/actions?query=workflow%3ATests+branch%3Amaster)
+[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/ohmysmtp/ohmysmtp-swiftmailer/Check%20&%20fix%20styling?label=code%20style)](https://github.com/ohmysmtp/ohmysmtp-swiftmailer/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amaster)
+[![Total Downloads](https://img.shields.io/packagist/dt/ohmysmtp/ohmysmtp-swiftmailer.svg?style=flat-square)](https://packagist.org/packages/ohmysmtp/ohmysmtp-swiftmailer)
 
 
 [OhMySMTP](https://ohmysmtp.com) lets you send transactional emails from your app over an easy to use API.
@@ -19,7 +19,7 @@ You will need an OhMySMTP account with a verified domain and organization with a
 Install the package via composer:
 
 ```bash
-composer require ohmysmtp/ohmysmtp_swiftmailer
+composer require ohmysmtp/ohmysmtp-swiftmailer
 ```
 ### Account Setup 
 
