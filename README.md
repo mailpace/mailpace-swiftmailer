@@ -10,6 +10,8 @@
 
 This OhMySMTP PHP Package is a transport for SwiftMailer to send emails via [OhMySMTP](https://ohmysmtp.com) to make sending emails from PHP apps super simple. You can use this with popular frameworks such as Laravel, Codeigniter and Symfony to send transactional emails, or with a standalone PHP app.
 
+This package uses the OhMySMTP HTTPS [/send endpoint](https://docs.ohmysmtp.com/reference/send) to send the email - which is generally faster and more reliable than SMTP, although you can of course use SMTP to send out emails from your PHP app without installing this package if you prefer.
+
 ## Pre-requisites
 
 You will need an OhMySMTP account with a verified domain and organization with an active plan.
@@ -62,15 +64,28 @@ $mailer->send($message);
 
 #### Sending with Laravel
 
-Set the default option in your `config/mail.php` configuration file to `ohmysmtp`
+Add ohmysmtp to the `config/mail.php` configuration file:
 
-Verify that your `config/services.php` configuration file contains the following option:
+```php
+'ohmysmtp' => [
+    'transport' => 'ohmysmtp',
+],
+```
+In the same file, change the default mailer to `ohmysmtp`:
+
+```php
+    'default' => env('MAIL_MAILER', 'ohmysmtp')
+```
+
+Add the following to your `config/services.php` configuration file:
 
 ```php
 'ohmysmtp' => [
     'apiToken' => env('OHMYSMTP_API_TOKEN'),
 ]
 ```
+
+And that's it!
 
 #### Sending with Symfony
 
