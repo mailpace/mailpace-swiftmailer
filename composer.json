@@ -16,8 +16,8 @@
     ],
     "require": {
         "php": ">=7.3",
-        "swiftmailer/swiftmailer": "^6.0.0",
-        "guzzlehttp/guzzle": "^6.0|^7.0"
+        "swiftmailer/swiftmailer": ">=6.2.0",
+        "guzzlehttp/guzzle": ">=6.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.17",
