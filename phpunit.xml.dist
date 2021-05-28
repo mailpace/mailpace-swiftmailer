@@ -36,4 +36,7 @@
     <logging>
         <junit outputFile="build/report.junit.xml"/>
     </logging>
+    <php>
+        <env name="OHMYSMTP_API_TOKEN" value="testing-api-key"/>
+    </php>
 </phpunit>

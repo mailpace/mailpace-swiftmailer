@@ -1,21 +1,23 @@
 {
-    "name": "vendor_slug/package_slug",
-    "description": ":package_description",
+    "name": "ohmysmtp/ohmysmtp_swiftmailer",
+    "description": "The official Swiftmailer transport for OhMySMTP",
     "keywords": [
-        ":vendor_name",
-        "package_slug"
+        "OhMySMTP",
+        "ohmysmtp_swiftmailer"
     ],
-    "homepage": "https://github.com/vendor_slug/package_slug",
+    "homepage": "https://github.com/ohmysmtp/ohmysmtp_swiftmailer",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Paul Oms",
+            "email": "support@ohmysmtp.com",
             "role": "Developer"
         }
     ],
     "require": {
-        "php": "^8.0"
+        "php": "^7.3",
+        "swiftmailer/swiftmailer": "^6.0.0",
+        "guzzlehttp/guzzle": "^6.0|^7.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.17",
@@ -25,12 +27,12 @@
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src"
+            "Ohmysmtp\\OhmysmtpSwiftmailer\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests"
+            "Ohmysmtp\\OhmysmtpSwiftmailer\\Tests\\": "tests"
         }
     },
     "scripts": {
