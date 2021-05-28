@@ -73,10 +73,8 @@ class OhmysmtpSwiftmailerTransport implements Swift_Transport
             $this->_eventDispatcher->dispatchEvent($responseEvent, 'responseReceived');
         }
 
-        if ($sendEvent) {
-            $sendEvent->setResult($success ? \Swift_Events_SendEvent::RESULT_SUCCESS : \Swift_Events_SendEvent::RESULT_FAILED);
-            $this->_eventDispatcher->dispatchEvent($sendEvent, 'sendPerformed');
-        }
+        $sendEvent->setResult($success ? \Swift_Events_SendEvent::RESULT_SUCCESS : \Swift_Events_SendEvent::RESULT_FAILED);
+        $this->_eventDispatcher->dispatchEvent($sendEvent, 'sendPerformed');
 
         return $success ? $this->countSent($message) : 0;
     }
@@ -104,7 +102,7 @@ class OhmysmtpSwiftmailerTransport implements Swift_Transport
      * @param array $emails
      * @return array
      */
-    protected function prepareEmailAddresses(array $emails)
+    protected function prepareEmailAddresses(array|string $emails)
     {
         $convertedEmails = [];
         foreach ($emails as $email => $name) {
@@ -119,7 +117,7 @@ class OhmysmtpSwiftmailerTransport implements Swift_Transport
      *
      * @param Swift_Mime_SimpleMessage $message
      * @param string $mimeType
-     * @return Swift_Mime_MimePart
+     * @return Swift_Mime_MimePart|null
      */
     protected function getMIMEPart(Swift_Mime_SimpleMessage $message, $mimeType)
     {
@@ -135,7 +133,7 @@ class OhmysmtpSwiftmailerTransport implements Swift_Transport
      * See https://docs.ohmysmtp.com/reference/send for details
      *
      * @param  Swift_Mime_SimpleMessage  $message
-     * @return object
+     * @return array<array-key, mixed>
      */
     protected function convertToOms(Swift_Mime_SimpleMessage $message)
     {
@@ -156,7 +154,6 @@ class OhmysmtpSwiftmailerTransport implements Swift_Transport
      *
      * @param  array                     $payload
      * @param  Swift_Mime_SimpleMessage  $message
-     * @return object
      */
     protected function addAddresses(&$payload, $message)
     {
@@ -171,6 +168,9 @@ class OhmysmtpSwiftmailerTransport implements Swift_Transport
             $payload['bcc'] = join(',', $this->prepareEmailAddresses($bcc));
         }
         if ($reply_to = $message->getReplyTo()) {
+            /**
+             * @psalm-suppress InvalidArgument
+            */
             $payload['replyto'] = join(',', $this->prepareEmailAddresses($reply_to));
         }
     }
@@ -180,7 +180,6 @@ class OhmysmtpSwiftmailerTransport implements Swift_Transport
      *
      * @param  array                     $payload
      * @param  Swift_Mime_SimpleMessage  $message
-     * @return object
      */
     protected function addSubject(&$payload, $message)
     {
@@ -192,7 +191,6 @@ class OhmysmtpSwiftmailerTransport implements Swift_Transport
      *
      * @param  array                     $payload
      * @param  Swift_Mime_SimpleMessage  $message
-     * @return object
      */
     protected function processMessageParts(&$payload, $message)
     {
@@ -241,12 +239,11 @@ class OhmysmtpSwiftmailerTransport implements Swift_Transport
      *
      * @param  array                     $payload
      * @param  Swift_Mime_SimpleMessage  $message
-     * @return object
      */
     protected function processTagsFromHeaders(&$payload, $message)
     {
         $payload['tags'] = [];
-        foreach ($message->getHeaders()->getAll() as $key => $value) {
+        foreach ($message->getHeaders()->getAll() as $value) {
             $fieldName = $value->getFieldName();
             if ($fieldName == 'OMS-Tag') {
                 array_push($payload['tags'], $value->getValue());
