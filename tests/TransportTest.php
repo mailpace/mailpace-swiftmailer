@@ -21,7 +21,7 @@ class OhmysmtpTransportTest extends TestCase
     /** @test */
     public function sendEmailTest()
     {
-        $message = new Swift_Message();
+        $message = (new Swift_Message());
         $message->setFrom('php@yourdomain.com', 'Your Name');
         $message->setSubject('Email Subject');
 
@@ -103,7 +103,7 @@ class OhmysmtpTransportTest extends TestCase
 
     public function testUnauthorizedRequest()
     {
-        $message = new Swift_Message();
+        $message = (new Swift_Message());
         $transport = new OhmysmtpTransportStub([new Response(403)]);
         $result = $transport->send($message);
         $this->assertEquals($result, 0);
