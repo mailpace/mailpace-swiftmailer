@@ -9,53 +9,54 @@ use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
 use Ohmysmtp\OhmysmtpSwiftmailer\OhmysmtpSwiftmailerTransport;
 use PHPUnit\Framework\TestCase;
-use Swift_Message;
 use Swift_Attachment;
+use Swift_Message;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
 class OhmysmtpTransportTest extends TestCase
-{    
+{
     // Basic test that covers most features
+
     /** @test */
     public function sendEmailTest()
     {
-		$message = new Swift_Message();
-		$message->setFrom('php@yourdomain.com', 'Your Name');
-		$message->setSubject('Email Subject');
+        $message = new Swift_Message();
+        $message->setFrom('php@yourdomain.com', 'Your Name');
+        $message->setSubject('Email Subject');
 
         // Addresses
-		$message->addTo('someone@example.com', 'Their Name');
-		$message->addTo('someone+else@example.com');
-		$message->addCc('carbon_copy@example.com');
-		$message->addCc('carbon_copy2@example.com', '2nd CC');
-		$message->addBcc('blind_carbon_copy@example.com');
-		$message->addBcc('blind_carbon_copy2@example.com', '2nd BCC');
+        $message->addTo('someone@example.com', 'Their Name');
+        $message->addTo('someone+else@example.com');
+        $message->addCc('carbon_copy@example.com');
+        $message->addCc('carbon_copy2@example.com', '2nd CC');
+        $message->addBcc('blind_carbon_copy@example.com');
+        $message->addBcc('blind_carbon_copy2@example.com', '2nd BCC');
         $message->addReplyTo('replyhere@example.com');
 
         // Message parts
-		$message->addPart('<h1>HTML Part</h1>', 'text/html');
-		$message->addPart('Text Part', 'text/plain');
+        $message->addPart('<h1>HTML Part</h1>', 'text/html');
+        $message->addPart('Text Part', 'text/plain');
 
         // Attachments
-		$attachment = new Swift_Attachment('Plain Text Attachment', 'plain_text.txt', 'text/plain');
-		$attachment2 = new Swift_Attachment('Plain Text Attachment #2', 'plain_text_2.txt', 'text/plain');
-		$attachment2->setDisposition('inline');
-		$message->attach($attachment);
-		$message->attach($attachment2);
+        $attachment = new Swift_Attachment('Plain Text Attachment', 'plain_text.txt', 'text/plain');
+        $attachment2 = new Swift_Attachment('Plain Text Attachment #2', 'plain_text_2.txt', 'text/plain');
+        $attachment2->setDisposition('inline');
+        $message->attach($attachment);
+        $message->attach($attachment2);
 
         // Tags via headers
         $headers = $message->getHeaders();
-		$headers->addTextHeader('OMS-Tag', 'tag-1');
+        $headers->addTextHeader('OMS-Tag', 'tag-1');
         $headers->addTextHeader('OMS-Tag', 'tag with spaces');
 
-		$transport = new OhmysmtpTransportStub([new Response(200)]);
-		$recipientCount = $transport->send($message);
+        $transport = new OhmysmtpTransportStub([new Response(200)]);
+        $recipientCount = $transport->send($message);
 
-		$this->assertEquals(6, $recipientCount);
-		$transaction = $transport->getHistory()[0];
-		$this->assertRequestIsAsExpected($message, $transaction['request']);
-	}
+        $this->assertEquals(6, $recipientCount);
+        $transaction = $transport->getHistory()[0];
+        $this->assertRequestIsAsExpected($message, $transaction['request']);
+    }
 
     protected function assertRequestIsAsExpected($message, $request)
     {
@@ -87,11 +88,11 @@ class OhmysmtpTransportTest extends TestCase
                     'content_type' => 'text/plain',
                     'content' => 'UGxhaW4gVGV4dCBBdHRhY2htZW50ICMy',
                     'name' => 'plain_text_2.txt',
-                    'cid' => 'cid:'.$attachments[1]->getId()
+                    'cid' => 'cid:'.$attachments[1]->getId(),
                 ],
-            ]
+            ],
         ], json_decode($request->getBody()->getContents(), true));
-	}
+    }
 
     protected function getAttachments($message)
     {
@@ -106,13 +107,14 @@ class OhmysmtpTransportTest extends TestCase
         $transport = new OhmysmtpTransportStub([new Response(403)]);
         $result = $transport->send($message);
         $this->assertEquals($result, 0);
-    } 
+    }
 }
 
-class OhmysmtpTransportStub extends OhmysmtpSwiftmailerTransport {
-	protected $client;
+class OhmysmtpTransportStub extends OhmysmtpSwiftmailerTransport
+{
+    protected $client;
 
-	public function __construct(array $responses = [])
+    public function __construct(array $responses = [])
     {
         parent::__construct('TEST_API_TOKEN');
 
