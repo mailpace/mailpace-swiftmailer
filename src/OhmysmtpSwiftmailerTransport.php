@@ -102,7 +102,7 @@ class OhmysmtpSwiftmailerTransport implements Swift_Transport
      * @param array $emails
      * @return array
      */
-    protected function prepareEmailAddresses(array|string $emails)
+    protected function prepareEmailAddresses(array | string $emails)
     {
         $convertedEmails = [];
         foreach ($emails as $email => $name) {
