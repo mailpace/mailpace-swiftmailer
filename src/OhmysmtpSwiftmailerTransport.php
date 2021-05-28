@@ -185,7 +185,6 @@ class OhmysmtpSwiftmailerTransport implements Swift_Transport
         $payload['subject'] = $message->getSubject();
     }
 
-
     /**
      * Turn SwiftMailer MIME parts into htmlbody, textbody and attachment array
      *
