@@ -64,28 +64,75 @@ $mailer->send($message);
 
 #### Sending with Laravel
 
-Add ohmysmtp to the `config/mail.php` configuration file:
+To send with Laravel you need to make a few small tweaks, but it really only takes a moment.
+
+1. Add ohmysmtp to the `config/mail.php` configuration file:
 
 ```php
 'ohmysmtp' => [
     'transport' => 'ohmysmtp',
 ],
 ```
-In the same file, change the default mailer to `ohmysmtp`:
 
-```php
-    'default' => env('MAIL_MAILER', 'ohmysmtp')
-```
 
-Add the following to your `config/services.php` configuration file:
+2. Add the following to your `config/services.php` configuration file:
 
 ```php
 'ohmysmtp' => [
-    'apiToken' => env('OHMYSMTP_API_TOKEN'),
+  'apiToken' => env('OHMYSMTP_API_TOKEN'),
 ]
 ```
 
-And that's it!
+3. In `config/app.php`, add the following to the providers array:
+
+```php
+App\Providers\OhmysmtpServiceProvider::class,
+``` 
+
+and remove / comment out the line:
+
+```php
+ Illuminate\Mail\MailServiceProvider::class,
+ ```
+
+4. In your `.env` file (or wherever you store environment variables), change the `MAIL_MAILER` variable as follows:
+
+`MAIL_MAILER=ohmysmtp`
+
+5. Create a new file called `OhmysmtpServiceProvider.php` in `App/Providers` with the following contents:
+
+```php
+<?php
+
+namespace App\Providers;
+
+use Illuminate\Mail\MailManager;
+use Illuminate\Mail\MailServiceProvider;
+use Ohmysmtp\OhmysmtpSwiftmailer\OhmysmtpSwiftmailerTransport;
+
+class OhmysmtpServiceProvider extends MailServiceProvider
+{
+    protected function registerIlluminateMailer()
+    {
+        $this->app->singleton('mail.manager', function ($app) {
+            $manager = new MailManager($app);
+            $this->registerOhMySmtpTransport($manager);
+            return $manager;
+        });
+    }
+
+    protected function registerOhMySmtpTransport(MailManager $manager) {
+        $manager->extend('ohmysmtp', function ($config) {
+            if (! isset($config['apiToken'])) {
+                $config = $this->app['config']->get('services.ohmysmtp', []);
+            }
+            return new OhmysmtpSwiftmailerTransport($config['apiToken']);
+        });
+    }
+}
+
+```
+After completing the above steps, all email will be sent via OhMySMTP.
 
 #### Sending with Symfony
 
