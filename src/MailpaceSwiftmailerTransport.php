@@ -1,6 +1,6 @@
 <?php
 
-namespace Ohmysmtp\OhmysmtpSwiftmailer;
+namespace Mailpace\MailpaceSwiftmailer;
 
 use GuzzleHttp\Client;
 use Swift_Events_EventListener;
@@ -9,13 +9,13 @@ use Swift_Mime_SimpleMessage;
 use Swift_Transport;
 
 // Implements 'isStarted', 'start', 'stop', 'ping', 'send', 'registerPlugin'
-class OhmysmtpSwiftmailerTransport implements Swift_Transport
+class MailpaceSwiftmailerTransport implements Swift_Transport
 {
     protected $version = '';
     protected $os = '';
 
     /**
-     * The OhMySMTP API Token
+     * The MailPace API Token
      *
      * @var string
      */
@@ -29,7 +29,7 @@ class OhmysmtpSwiftmailerTransport implements Swift_Transport
     /**
      * Create a new transport.
      *
-     * @param  string  $apiToken The API token for your OhMySMTP organization
+     * @param  string  $apiToken The API token for your MailPace organization
      * @return void
      */
     public function __construct($apiToken)
@@ -56,13 +56,13 @@ class OhmysmtpSwiftmailerTransport implements Swift_Transport
 
         $php_version = $this->version;
 
-        $response = $client->request('POST', 'https://app.ohmysmtp.com/api/v1/send', [
+        $response = $client->request('POST', 'https://app.mailpace.com/api/v1/send', [
             'json' => $this->convertToOms($message),
             'headers' => [
-                'OhMySMTP-Server-Token' => $this->apiToken,
+                'MailPace-Server-Token' => $this->apiToken,
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
-                'User-Agent' => "OhMySMTP Swiftmailer Package (PHP v$php_version)",
+                'User-Agent' => "MailPace Swiftmailer Package (PHP v$php_version)",
             ],
             'http_errors' => false, // Errors are handled by Swiftmailer event listener
         ]);
@@ -129,8 +129,8 @@ class OhmysmtpSwiftmailerTransport implements Swift_Transport
     }
 
     /**
-     * Convert a Swift MIME Message to an OhMySMTP API object
-     * See https://docs.ohmysmtp.com/reference/send for details
+     * Convert a Swift MIME Message to an MailPace API object
+     * See https://docs.mailpace.com/reference/send for details
      *
      * @param  Swift_Mime_SimpleMessage  $message
      * @return array<array-key, mixed>
@@ -150,7 +150,7 @@ class OhmysmtpSwiftmailerTransport implements Swift_Transport
     }
 
     /**
-     * Add SwiftMailer recipients to OMS payload
+     * Add SwiftMailer recipients to MailPace payload
      *
      * @param  array                     $payload
      * @param  Swift_Mime_SimpleMessage  $message
@@ -176,7 +176,7 @@ class OhmysmtpSwiftmailerTransport implements Swift_Transport
     }
 
     /**
-     * Add swiftmailer subject to OMS payload
+     * Add swiftmailer subject to MailPace payload
      *
      * @param  array                     $payload
      * @param  Swift_Mime_SimpleMessage  $message
@@ -235,7 +235,7 @@ class OhmysmtpSwiftmailerTransport implements Swift_Transport
     }
 
     /**
-     * Move OMS-Tags from headers into the API payload
+     * Move MailPace-Tags from headers into the API payload
      *
      * @param  array                     $payload
      * @param  Swift_Mime_SimpleMessage  $message
@@ -245,7 +245,7 @@ class OhmysmtpSwiftmailerTransport implements Swift_Transport
         $payload['tags'] = [];
         foreach ($message->getHeaders()->getAll() as $value) {
             $fieldName = $value->getFieldName();
-            if ($fieldName == 'OMS-Tag') {
+            if ($fieldName == 'MailPace-Tag') {
                 array_push($payload['tags'], $value->getValue());
             }
         }

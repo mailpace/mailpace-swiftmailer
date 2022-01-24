@@ -1,20 +1,20 @@
 {
-    "name": "ohmysmtp/ohmysmtp-swiftmailer",
-    "description": "The official Swiftmailer transport for OhMySMTP",
+    "name": "mailpace/mailpace-swiftmailer",
+    "description": "The official Swiftmailer transport for MailPace",
     "keywords": [
-        "OhMySMTP",
-        "ohmysmtp-swiftmailer",
+        "MailPace",
+        "mailpace-swiftmailer",
         "swiftmailer",
         "transactional",
         "email",
         "transactional email"
     ],
-    "homepage": "https://github.com/ohmysmtp/ohmysmtp-swiftmailer",
+    "homepage": "https://github.com/mailpace/mailpace-swiftmailer",
     "license": "MIT",
     "authors": [
         {
-            "name": "Paul Oms",
-            "email": "support@ohmysmtp.com",
+            "name": "Paul",
+            "email": "support@mailpace.com",
             "role": "Developer"
         }
     ],
@@ -32,12 +32,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Ohmysmtp\\OhmysmtpSwiftmailer\\": "src"
+            "Mailpace\\MailpaceSwiftmailer\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Ohmysmtp\\OhmysmtpSwiftmailer\\Tests\\": "tests"
+            "Mailpace\\MailpaceSwiftmailer\\Tests\\": "tests"
         }
     },
     "scripts": {

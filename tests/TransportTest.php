@@ -1,20 +1,20 @@
 <?php
 
-namespace Ohmysmtp\OhmysmtpSwiftmailer\Tests;
+namespace Mailpace\MailpaceSwiftmailer\Tests;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
-use Ohmysmtp\OhmysmtpSwiftmailer\OhmysmtpSwiftmailerTransport;
+use Mailpace\MailpaceSwiftmailer\MailpaceSwiftmailerTransport;
 use PHPUnit\Framework\TestCase;
 use Swift_Attachment;
 use Swift_Message;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-class OhmysmtpTransportTest extends TestCase
+class MailpaceTransportTest extends TestCase
 {
     // Basic test that covers most features
 
@@ -47,10 +47,10 @@ class OhmysmtpTransportTest extends TestCase
 
         // Tags via headers
         $headers = $message->getHeaders();
-        $headers->addTextHeader('OMS-Tag', 'tag-1');
-        $headers->addTextHeader('OMS-Tag', 'tag with spaces');
+        $headers->addTextHeader('MailPace-Tag', 'tag-1');
+        $headers->addTextHeader('MailPace-Tag', 'tag with spaces');
 
-        $transport = new OhmysmtpTransportStub([new Response(200)]);
+        $transport = new MailpaceTransportStub([new Response(200)]);
         $recipientCount = $transport->send($message);
 
         $this->assertEquals(6, $recipientCount);
@@ -63,8 +63,8 @@ class OhmysmtpTransportTest extends TestCase
         $attachments = $this->getAttachments($message);
 
         $this->assertEquals('POST', $request->getMethod());
-        $this->assertEquals('TEST_API_TOKEN', $request->getHeaderLine('OhMySMTP-Server-Token'));
-        $this->assertEquals('OhMySMTP Swiftmailer Package (PHP v'.phpversion().')', $request->getHeaderLine('User-Agent'));
+        $this->assertEquals('TEST_API_TOKEN', $request->getHeaderLine('MailPace-Server-Token'));
+        $this->assertEquals('MailPace Swiftmailer Package (PHP v'.phpversion().')', $request->getHeaderLine('User-Agent'));
         $this->assertEquals('application/json', $request->getHeaderLine('Content-Type'));
         $this->assertEquals('application/json', $request->getHeaderLine('Accept'));
 
@@ -104,13 +104,13 @@ class OhmysmtpTransportTest extends TestCase
     public function testUnauthorizedRequest()
     {
         $message = (new Swift_Message());
-        $transport = new OhmysmtpTransportStub([new Response(403)]);
+        $transport = new MailpaceTransportStub([new Response(403)]);
         $result = $transport->send($message);
         $this->assertEquals($result, 0);
     }
 }
 
-class OhmysmtpTransportStub extends OhmysmtpSwiftmailerTransport
+class MailpaceTransportStub extends MailpaceSwiftmailerTransport
 {
     protected $client;
 
